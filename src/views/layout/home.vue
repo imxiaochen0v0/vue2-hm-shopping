@@ -9,12 +9,12 @@
     <!-- 轮播图 -->
     <van-swipe class="my-swipe" :autoplay="3000" indicator-color="white">
       <van-swipe-item v-for="(item, index) in bannerList" :key="index">
-        <img :src="item.imgUrl" alt="">
+        <img :src="item.imgUrl" alt="" style="padding: 5px;border-radius: 10px;">
       </van-swipe-item>
     </van-swipe>
 
     <!-- 导航 -->
-    <van-grid column-num="5" icon-size="40">
+    <van-grid :border="false" column-num="5" icon-size="40" style="padding: 5px">
       <van-grid-item v-for="(item,index) in navList" :key="index"
         :icon="item.imgUrl" :text="item.text"
         @click="$router.push('/category')" />
@@ -90,7 +90,6 @@ export default {
   color: #fff;
   font-size: 20px;
   text-align: center;
-  background-color: #39a9ed;
 }
 
 .my-swipe .van-swipe-item img {
