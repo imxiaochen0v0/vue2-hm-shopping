@@ -98,7 +98,7 @@
           <CountBox v-model="addCount"></CountBox>
       </div>
       <div class="showbtn" v-if="detail.stock_total > 0">
-        <div class="btn" v-if="mode === 'cart'">加入购物车</div>
+        <div class="btn" v-if="mode === 'cart'" @click="addCart">加入购物车</div>
         <div class="btn now" v-else>立刻购买</div>
       </div>
       <div class="btn-none" v-else>该商品已抢完</div>
@@ -139,7 +139,6 @@ export default {
     },
     async getDetail () {
       const { data: { detail } } = await getProductDetail(this.$route.params.id)
-      console.log('🚀 ~ getDetail ~ detail:', detail)
       this.detail = detail
       this.images = detail.goods_images
     },
@@ -158,6 +157,30 @@ export default {
     buyFn () {
       this.mode = 'buyNow'
       this.show = true
+    },
+    addCart () {
+      if (!this.$store.getters.token) {
+        this.$dialog.confirm({
+          title: '温馨提示',
+          message: '您还没有登录，是否登录？',
+          confirmButtonText: '去登录',
+          cancelButtonText: '再逛逛',
+          confirmButtonColor: 'pink'
+        }).then(() => {
+          // 如果希望跳转到登录能回跳回来，需要在跳转时携带参数(当前路径地址)
+          // this.$route.fullPath(会包含参数)
+          this.$router.replace({
+            path: '/login',
+            query: {
+              backUrl: this.$route.fullPath
+            }
+          })
+        }).catch(() => {
+
+        })
+        return
+      }
+      console.log('2 :>> ', 2)
     }
   }
 }
