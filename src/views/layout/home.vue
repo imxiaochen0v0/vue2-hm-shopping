@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <!-- 导航条 -->
-    <van-nav-bar title="沃尔玛" fixed safe-area-inset-top/>
+    <van-nav-bar title="沃尔玛" fixed placeholder=""/>
 
     <!-- 搜索框 -->
     <van-search readonly shape="round" background="#ffffff" placeholder="请在此输入搜索关键词" @click="$router.push('/search')" />
@@ -63,25 +63,12 @@ export default {
 <style lang="scss" scoped>
 // 主题 padding
 .home {
-  padding-top: 100px;
   padding-bottom: 50px;
-}
-
-// 导航条样式定制
-.van-nav-bar {
-  z-index: 999;
-
-  ::v-deep .van-nav-bar__title {
-    color: #fff;
-  }
 }
 
 // 搜索框样式定制
 .van-search {
-  position: fixed;
   width: 100%;
-  top: 46px;
-  z-index: 999;
 }
 
 // 分类导航部分

@@ -1,6 +1,11 @@
 import Vue from 'vue'
-import { Button, Tabbar, TabbarItem, NavBar, Toast, Search, Swipe, SwipeItem, Grid, GridItem, Icon, Rate } from 'vant'
+import { Button, Tabbar, TabbarItem, NavBar, Toast, Search, Swipe, SwipeItem, Grid, GridItem, Icon, Rate, GoodsAction, GoodsActionIcon, GoodsActionButton, Collapse, CollapseItem } from 'vant'
 
+Vue.use(Collapse)
+Vue.use(CollapseItem)
+Vue.use(GoodsAction)
+Vue.use(GoodsActionButton)
+Vue.use(GoodsActionIcon)
 Vue.use(Rate)
 Vue.use(Icon)
 Vue.use(Button)

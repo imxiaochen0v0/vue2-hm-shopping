@@ -1,11 +1,11 @@
 <template>
-  <div class="prodetail">
+  <div class="proDetail">
     <van-nav-bar fixed title="商品详情页" left-arrow @click-left="$router.go(-1)" />
 
    <div>
      <van-swipe :autoplay="3000" @change="onChange">
         <van-swipe-item v-for="(image, index) in images" :key="index">
-          <img :src="image.external_url" height="300px" style="padding: 10px; border-radius: 15px;"/>
+          <img :src="image.external_url" height="300px" style="padding: 10px; border-radius: 15px; object-fit: cover;"/>
         </van-swipe-item>
 
         <template #indicator>
@@ -40,25 +40,26 @@
 
     <!-- 商品评价 -->
     <div class="comment">
-      <div class="comment-title">
-        <div class="left">商品评价 ({{ total }})</div>
-        <div class="right">查看更多 <van-icon name="arrow" /> </div>
-      </div>
-      <div class="comment-list">
-        <div class="comment-item" v-for="item in comment" :key="item.comment_id">
-          <div class="top">
-            <img :src="item.user.avatar_url||defaultImg" alt="">
-            <div class="name">{{ item.user.nick_name }}</div>
-            <van-rate :size="16" :value="item.score" color="#ffd21e" void-icon="star" void-color="#eee" />
-          </div>
-          <div class="content">
-            {{ item.content }}
-          </div>
-          <div class="time">
-          {{ item.create_time }}
+      <van-collapse v-model="activeNames" :border="false">
+        <van-collapse-item title="评价" size="large">
+                <div class="comment-list">
+          <div class="comment-item" v-for="item in comment" :key="item.comment_id">
+            <div class="top">
+              <img :src="item.user.avatar_url || defaultImg" alt="">
+              <div class="name">{{ item.user.nick_name }}</div>
+              <van-rate :size="16" :value="item.score" color="#ffd21e" void-icon="star" void-color="#eee" />
+            </div>
+            <div class="content">
+              {{ item.content }}
+            </div>
+            <div class="time">
+            {{ item.create_time }}
+            </div>
           </div>
         </div>
-      </div>
+        </van-collapse-item>
+      </van-collapse>
+
     </div>
 
     <!-- 商品描述 -->
@@ -67,16 +68,12 @@
 
     <!-- 底部 -->
     <div class="footer">
-      <div class="icon-home">
-        <van-icon name="wap-home-o" />
-        <span>首页</span>
-      </div>
-      <div class="icon-cart">
-        <van-icon name="shopping-cart-o" />
-        <span>购物车</span>
-      </div>
-      <div class="btn-add">加入购物车</div>
-      <div class="btn-buy">立刻购买</div>
+      <van-goods-action>
+        <van-goods-action-icon icon="wap-home-o" text="首页" />
+        <van-goods-action-icon icon="cart-o" text="购物车" />
+        <van-goods-action-button color="pink" type="warning" text="加入购物车" />
+        <van-goods-action-button color="#FF69B4" type="danger" text="立即购买" />
+      </van-goods-action>
     </div>
   </div>
 </template>
@@ -88,6 +85,7 @@ export default {
   name: 'ProDetail',
   data () {
     return {
+      activeNames: ['1'],
       images: [],
       current: 0,
       detail: {},
@@ -116,14 +114,13 @@ export default {
       })
       this.comment = list
       this.total = total
-      console.log('🚀 ~ getComments ~ this.comment:', this.comment)
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.prodetail {
+.proDetail {
   padding-top: 46px;
 
   ::v-deep .van-icon-arrow-left {

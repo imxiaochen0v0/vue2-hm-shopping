@@ -1,7 +1,7 @@
 <template>
   <div class="category">
     <!-- 分类 -->
-    <van-nav-bar title="全部分类" fixed />
+    <van-nav-bar title="全部分类" fixed placeholder/>
 
     <!-- 搜索框 -->
     <van-search readonly shape="round" background="#ffffff" placeholder="请输入搜索关键词" @click="$router.push('/search')" />
@@ -52,7 +52,6 @@ export default {
 <style lang="scss" scoped>
 // 主题 padding
 .category {
-  padding-top: 100px;
   padding-bottom: 50px;
   height: 100vh;
 
@@ -61,9 +60,9 @@ export default {
     display: flex;
 
     .left {
-      width: 85px;
+      width: 90px;
       height: 100%;
-      background-color: #f3f3f3;
+      background-color: #fcfcfc;
       overflow: auto;
 
       a {
@@ -71,11 +70,11 @@ export default {
         height: 45px;
         line-height: 45px;
         text-align: center;
-        color: #444444;
-        font-size: 12px;
+        color: #333;
+        font-size: 15px;
 
         &.active {
-          color: #fb442f;
+          color: pink;
           background-color: #fff;
         }
       }
@@ -111,16 +110,4 @@ export default {
     }
   }
 }
-
-// 导航条样式定制
-.van-nav-bar {
-  z-index: 999;
-}
-
-// 搜索框样式定制
-.van-search {
-  position: fixed;
-  width: 100%;
-  top: 46px;
-  z-index: 999;
-}</style>
+</style>
