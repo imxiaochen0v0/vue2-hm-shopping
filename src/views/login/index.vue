@@ -65,9 +65,6 @@ export default {
       // const { data: { key, base64 } } = await request.get('/captcha/image')
       this.picKey = res.data.key
       this.picUrl = res.data.base64
-
-      // Toast('获取图形验证码成功')
-      // this.$toast('获取图形验证码成功')
     },
     // 校验手机号 和 图形验证码 是否合法
     validFn () {
