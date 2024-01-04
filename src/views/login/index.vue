@@ -87,6 +87,7 @@ export default {
       }
       if (this.second === this.totalSeconds && !this.timer) {
         await getMsgCode(this.picCode, this.picKey, this.mobile)
+        this.$toast('短信验证码发送成功(246810)')
         // 开始倒计时
         this.timer = setInterval(() => {
           this.second--
