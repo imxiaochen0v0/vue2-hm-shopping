@@ -48,13 +48,16 @@ export default {
       msgCode: '' // 短信验证码
     }
   },
+
   async created () {
     this.getPicCode()
   },
+
   destroyed () {
     // 离开页面 清除定时器
     clearInterval(this.timer)
   },
+
   methods: {
     // 获取图形验证码
     async getPicCode () {
@@ -66,7 +69,6 @@ export default {
       // Toast('获取图形验证码成功')
       // this.$toast('获取图形验证码成功')
     },
-
     // 校验手机号 和 图形验证码 是否合法
     validFn () {
       if (!/^1[3-9]\d{9}/.test(this.mobile)) {
@@ -79,9 +81,9 @@ export default {
       }
       return true
     },
-
     // 获取短信验证码
     async getCode () {
+      // 校验
       if (!this.validFn()) {
         return
       }
@@ -100,6 +102,7 @@ export default {
         }, 1000)
       }
     },
+    // 登录
     async login () {
       if (!this.validFn()) {
         return
