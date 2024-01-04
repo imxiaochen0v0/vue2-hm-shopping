@@ -13,5 +13,5 @@ export const setInfo = (obj) => {
 
 // 移除个人信息
 export const removeInfo = () => {
-
+  localStorage.removeItem(INFO_KEY)
 }
