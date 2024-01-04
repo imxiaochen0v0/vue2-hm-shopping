@@ -42,13 +42,16 @@ export default {
   },
   methods: {
     search (keyword) {
-      console.log('🚀 ~ search ~ keyword:', keyword)
-      this.history = this.history.filter(item => item !== keyword)
-      this.history.unshift(keyword)
+      if (keyword.trim() !== '') {
+        this.history = this.history.filter(item => item !== keyword)
+        this.history.unshift(keyword)
 
-      setHistory(this.history)
+        setHistory(this.history)
 
-      this.$router.push(`/searchList?keyword=${keyword}`)
+        this.$router.push(`/searchList?keyword=${keyword}`)
+      } else {
+        this.$toast.fail('请输入搜索关键词')
+      }
     },
     clear () {
       this.history = []
