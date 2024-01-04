@@ -1,5 +1,5 @@
 <template>
-  <div class="proDetail">
+  <div class="proDetail" v-if="detail.goods_id">
     <van-nav-bar fixed title="商品详情页" left-arrow @click-left="$router.go(-1)" />
 
    <div>
@@ -95,7 +95,7 @@
       </div>
       <div class="num-box">
         <span>数量</span>
-        数字框占位
+          <CountBox v-model="addCount"></CountBox>
       </div>
       <div class="showbtn" v-if="detail.stock_total > 0">
         <div class="btn" v-if="mode === 'cart'">加入购物车</div>
@@ -110,10 +110,14 @@
 <script>
 import { getProductDetail, getProductComment } from '@/api/product'
 import defaultImg from '@/assets/default-avatar.png'
+import CountBox from '@/components/CountBox.vue'
+
 export default {
   name: 'ProDetail',
+  components: { CountBox },
   data () {
     return {
+      addCount: 1,
       mode: 'cart',
       show: false,
       activeNames: ['1'],
