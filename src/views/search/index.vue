@@ -31,12 +31,13 @@
 </template>
 
 <script>
+import { getHistory, setHistory } from '@/utils/storage'
 export default {
   name: 'SearchIndex',
   data () {
     return {
       keyword: '',
-      history: ['炒锅', '电视', '冰箱', '手机']
+      history: getHistory()
     }
   },
   methods: {
@@ -44,10 +45,14 @@ export default {
       console.log('🚀 ~ search ~ keyword:', keyword)
       this.history = this.history.filter(item => item !== keyword)
       this.history.unshift(keyword)
-      // this.$router.push('/searchList')
+
+      setHistory(this.history)
+
+      this.$router.push(`/searchList?keyword=${keyword}`)
     },
     clear () {
       this.history = []
+      setHistory(this.history)
     }
   }
 }
