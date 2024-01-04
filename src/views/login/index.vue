@@ -108,7 +108,8 @@ export default {
         this.$toast('请输入正确的短信验证码')
         return
       }
-      await login(this.mobile, this.msgCode)
+      const res = await login(this.mobile, this.msgCode)
+      console.log('🚀 ~ login ~ res:', res)
       this.$toast('登录成功')
       this.$router.push('/')
     }
