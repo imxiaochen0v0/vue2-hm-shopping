@@ -11,37 +11,49 @@
       <!-- 主体 -->
       <div class="form">
         <div class="form-item">
-          <input class="inp" maxlength="11" placeholder="请输入手机号码" type="text">
+          <input v-model="mobile" class="inp" maxlength="11" placeholder="请输入手机号码" type="text">
         </div>
         <div class="form-item">
-          <input class="inp" maxlength="5" placeholder="请输入图形验证码" type="text">
+          <input v-model="picCode" class="inp" maxlength="5" placeholder="请输入图形验证码" type="text">
           <img v-if="picUrl" :src="picUrl" alt="" @click="getPicCode" >
         </div>
         <div class="form-item">
-          <input v-model="picCode" class="inp" placeholder="请输入短信验证码" type="text">
-          <button>获取验证码</button>
+          <input v-model="msgCode" class="inp" placeholder="请输入短信验证码" type="text">
+          <button @click="getCode">
+          {{ second === totalSeconds ? '获取验证码' : `${second}s后重新获取`}}
+        </button>
         </div>
       </div>
 
-      <div class="login-btn">登录</div>
+      <div class="login-btn" @click="login">登录</div>
     </div>
   </div>
 </template>
 
 <script>
-import { getPicCode } from '@/api/login'
+import { getPicCode, getMsgCode, login } from '@/api/login'
+// import { Toast } from 'vant'
 
 export default {
   name: 'LoginPage',
   data () {
     return {
-      picCode: '', // 图形验证码
       picKey: '', // 图形验证码key
-      picUrl: '' // 图形验证码图片
+      picUrl: '', // 图形验证码图片
+      totalSeconds: 60, // 倒计时总秒数
+      second: 60, // 倒计时秒数
+      timer: null, // 定时器
+      mobile: '', // 手机号
+      picCode: '', // 用户输入的图形验证码
+      msgCode: '' // 短信验证码
     }
   },
   async created () {
     this.getPicCode()
+  },
+  destroyed () {
+    // 离开页面 清除定时器
+    clearInterval(this.timer)
   },
   methods: {
     // 获取图形验证码
@@ -50,6 +62,54 @@ export default {
       // const { data: { key, base64 } } = await request.get('/captcha/image')
       this.picKey = res.data.key
       this.picUrl = res.data.base64
+
+      // Toast('获取图形验证码成功')
+      // this.$toast('获取图形验证码成功')
+    },
+
+    // 校验手机号 和 图形验证码 是否合法
+    validFn () {
+      if (!/^1[3-9]\d{9}/.test(this.mobile)) {
+        this.$toast('请输入正确的手机号')
+        return false
+      }
+      if (!/^\w{4}$/.test(this.picCode)) {
+        this.$toast('请输入正确的图形验证码')
+        return false
+      }
+      return true
+    },
+
+    // 获取短信验证码
+    async getCode () {
+      if (!this.validFn()) {
+        return
+      }
+      if (this.second === this.totalSeconds && !this.timer) {
+        await getMsgCode(this.picCode, this.picKey, this.mobile)
+        // 开始倒计时
+        this.timer = setInterval(() => {
+          this.second--
+          if (this.second <= 0) {
+            // 重置倒计时
+            this.second = this.totalSeconds
+            clearInterval(this.timer)
+            this.timer = null
+          }
+        }, 1000)
+      }
+    },
+    async login () {
+      if (!this.validFn()) {
+        return
+      }
+      if (!/^\d{6}$/.test(this.msgCode)) {
+        this.$toast('请输入正确的短信验证码')
+        return
+      }
+      await login(this.mobile, this.msgCode)
+      this.$toast('登录成功')
+      this.$router.push('/')
     }
   }
 }
