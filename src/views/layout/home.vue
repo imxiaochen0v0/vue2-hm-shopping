@@ -1,10 +1,10 @@
 <template>
   <div class="home">
     <!-- 导航条 -->
-    <van-nav-bar title="智慧商城" fixed />
+    <van-nav-bar title="沃尔玛" fixed safe-area-inset-top/>
 
     <!-- 搜索框 -->
-    <van-search readonly shape="round" background="#f1f1f2" placeholder="请在此输入搜索关键词" @click="$router.push('/search')" />
+    <van-search readonly shape="round" background="#ffffff" placeholder="请在此输入搜索关键词" @click="$router.push('/search')" />
 
     <!-- 轮播图 -->
     <van-swipe class="my-swipe" :autoplay="3000" indicator-color="white">
@@ -53,7 +53,6 @@ export default {
   },
   async created () {
     const { data: { pageData } } = await getHomeData()
-    console.log('🚀 ~ created ~ pageData:', pageData)
     this.bannerList = pageData.items[1].data
     this.navList = pageData.items[4].data
     this.proList = pageData.items[6].data
@@ -71,7 +70,6 @@ export default {
 // 导航条样式定制
 .van-nav-bar {
   z-index: 999;
-  background-color: #c21401;
 
   ::v-deep .van-nav-bar__title {
     color: #fff;
