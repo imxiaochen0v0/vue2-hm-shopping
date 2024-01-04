@@ -22,6 +22,7 @@ instance.interceptors.response.use(function (response) {
   const res = response.data
   if (res.status !== 200) {
     Toast(res.message)
+    // 抛出一个错误的 promise
     return Promise.reject(res.message)
   }
   // 对响应数据做点什么(axios会多包一层data)
