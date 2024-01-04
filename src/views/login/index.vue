@@ -15,10 +15,10 @@
         </div>
         <div class="form-item">
           <input class="inp" maxlength="5" placeholder="请输入图形验证码" type="text">
-          <img src="@/assets/code.png" alt="">
+          <img v-if="picUrl" :src="picUrl" alt="" @click="getPicCode" >
         </div>
         <div class="form-item">
-          <input class="inp" placeholder="请输入短信验证码" type="text">
+          <input v-model="picCode" class="inp" placeholder="请输入短信验证码" type="text">
           <button>获取验证码</button>
         </div>
       </div>
@@ -29,8 +29,29 @@
 </template>
 
 <script>
+import { getPicCode } from '@/api/login'
+
 export default {
-  name: 'LoginPage'
+  name: 'LoginPage',
+  data () {
+    return {
+      picCode: '', // 图形验证码
+      picKey: '', // 图形验证码key
+      picUrl: '' // 图形验证码图片
+    }
+  },
+  async created () {
+    this.getPicCode()
+  },
+  methods: {
+    // 获取图形验证码
+    async getPicCode () {
+      const res = await getPicCode()
+      // const { data: { key, base64 } } = await request.get('/captcha/image')
+      this.picKey = res.data.key
+      this.picUrl = res.data.base64
+    }
+  }
 }
 </script>
 
