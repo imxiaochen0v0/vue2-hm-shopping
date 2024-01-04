@@ -69,8 +69,12 @@
     <!-- 底部 -->
     <div class="footer">
       <van-goods-action safe-area-inset-bottom>
-        <van-goods-action-icon icon="wap-home-o" text="首页" />
-        <van-goods-action-icon icon="cart-o" text="购物车" :badge="cartTotal"/>
+        <van-goods-action-icon icon="wap-home-o" text="首页" @click="$router.push('/')" />
+        <van-goods-action-icon
+        icon="cart-o"
+        text="购物车"
+        :badge="cartTotal"
+        @click="$router.push('/cart')"/>
         <van-goods-action-button type="warning" text="加入购物车" @click="addFn" />
         <van-goods-action-button type="danger" text="立即购买" @click="buyFn"/>
       </van-goods-action>

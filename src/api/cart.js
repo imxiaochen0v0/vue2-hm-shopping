@@ -22,3 +22,11 @@ export const addCart = (obj) => {
 export const getCartTotal = () => {
   return request.get('/cart/total')
 }
+
+/**
+ * 获取购物车商品列表
+ * @returns promise
+ */
+export const getCartList = () => {
+  return request.get('/cart/list')
+}
