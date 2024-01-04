@@ -37,6 +37,7 @@ export default {
   },
   async created () {
     const { data: { list } } = await getProductList({
+      categoryId: this.$route.query.categoryId,
       goodsName: this.$route.query.keyword,
       page: '1'
     })
