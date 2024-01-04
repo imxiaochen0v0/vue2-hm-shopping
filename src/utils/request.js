@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { Toast } from 'vant'
+import store from '@/store'
 // 创建axios实例
 const instance = axios.create({
   baseURL: 'http://cba.itlike.com/public/index.php?s=/api',
@@ -16,6 +17,13 @@ instance.interceptors.request.use(function (config) {
     forbidClick: true, // 禁止背景点击
     duration: 0 // 持续展示 toast
   })
+
+  // 每次发送请求之前判断是否存在token,如果存在,则统一在http请求的header都加上token,不用每次请求都手动添加了
+  const token = store.getters.token
+  if (token) {
+    config.headers['Access-Token'] = token
+    config.headers.platform = 'H5'
+  }
   return config
 }, function (error) {
   // 对请求错误做些什么

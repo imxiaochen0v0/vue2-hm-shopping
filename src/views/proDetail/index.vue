@@ -70,11 +70,12 @@
     <div class="footer">
       <van-goods-action safe-area-inset-bottom>
         <van-goods-action-icon icon="wap-home-o" text="首页" />
-        <van-goods-action-icon icon="cart-o" text="购物车" />
+        <van-goods-action-icon icon="cart-o" text="购物车" :badge="cartTotal"/>
         <van-goods-action-button type="warning" text="加入购物车" @click="addFn" />
         <van-goods-action-button type="danger" text="立即购买" @click="buyFn"/>
       </van-goods-action>
     </div>
+
     <!-- 加入购物车弹层 -->
     <van-action-sheet v-model="show" :title="mode === 'cart' ? '加入购物车' : '立刻购买'">
     <div class="product">
@@ -109,6 +110,7 @@
 
 <script>
 import { getProductDetail, getProductComment } from '@/api/product'
+import { addCart, getCartTotal } from '@/api/cart'
 import defaultImg from '@/assets/default-avatar.png'
 import CountBox from '@/components/CountBox.vue'
 
@@ -126,12 +128,14 @@ export default {
       detail: {},
       comment: [],
       total: 0,
-      defaultImg
+      defaultImg,
+      cartTotal: 0
     }
   },
   created () {
     this.getDetail()
     this.getComments()
+    this.getCartTotal()
   },
   methods: {
     onChange (index) {
@@ -150,6 +154,10 @@ export default {
       this.comment = list
       this.total = total
     },
+    async getCartTotal () {
+      const { data: { cartTotal } } = await getCartTotal()
+      this.cartTotal = cartTotal
+    },
     addFn () {
       this.mode = 'cart'
       this.show = true
@@ -158,7 +166,7 @@ export default {
       this.mode = 'buyNow'
       this.show = true
     },
-    addCart () {
+    async addCart () {
       if (!this.$store.getters.token) {
         this.$dialog.confirm({
           title: '温馨提示',
@@ -180,7 +188,14 @@ export default {
         })
         return
       }
-      console.log('2 :>> ', 2)
+      const { data } = await addCart({
+        goodsId: this.$route.params.id,
+        goodsNum: this.addCount,
+        goodsSkuId: this.detail.skuList[0].goods_sku_id
+      })
+      this.cartTotal = data.cartTotal
+      this.$toast.success('添加成功')
+      this.show = false
     }
   }
 }
