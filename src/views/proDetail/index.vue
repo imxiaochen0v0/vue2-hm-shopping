@@ -19,7 +19,7 @@
       <div class="title">
         <div class="price">
           <span class="now">￥{{ detail.goods_price_min}}</span>
-          <span class="oldprice">￥{{ detail.goods_price_max }}</span>
+          <span class="oldprice">￥{{ detail.line_price_min }}</span>
         </div>
         <div class="sellcount">已售{{ detail.goods_sales }}件</div>
       </div>
@@ -68,13 +68,42 @@
 
     <!-- 底部 -->
     <div class="footer">
-      <van-goods-action>
+      <van-goods-action safe-area-inset-bottom>
         <van-goods-action-icon icon="wap-home-o" text="首页" />
         <van-goods-action-icon icon="cart-o" text="购物车" />
-        <van-goods-action-button color="pink" type="warning" text="加入购物车" />
-        <van-goods-action-button color="#FF69B4" type="danger" text="立即购买" />
+        <van-goods-action-button type="warning" text="加入购物车" @click="addFn" />
+        <van-goods-action-button type="danger" text="立即购买" @click="buyFn"/>
       </van-goods-action>
     </div>
+    <!-- 加入购物车弹层 -->
+    <van-action-sheet v-model="show" :title="mode === 'cart' ? '加入购物车' : '立刻购买'">
+    <div class="product">
+      <div class="product-title">
+        <div class="left">
+          <img :src="detail.goods_image" alt="">
+        </div>
+        <div class="right">
+          <div class="price">
+            <span>¥</span>
+            <span class="nowprice">{{ detail.goods_price_min }}</span>
+          </div>
+          <div class="count">
+            <span>库存</span>
+            <span>{{ detail.stock_total }}</span>
+          </div>
+        </div>
+      </div>
+      <div class="num-box">
+        <span>数量</span>
+        数字框占位
+      </div>
+      <div class="showbtn" v-if="detail.stock_total > 0">
+        <div class="btn" v-if="mode === 'cart'">加入购物车</div>
+        <div class="btn now" v-else>立刻购买</div>
+      </div>
+      <div class="btn-none" v-else>该商品已抢完</div>
+    </div>
+  </van-action-sheet>
   </div>
 </template>
 
@@ -85,6 +114,8 @@ export default {
   name: 'ProDetail',
   data () {
     return {
+      mode: 'cart',
+      show: false,
       activeNames: ['1'],
       images: [],
       current: 0,
@@ -104,6 +135,7 @@ export default {
     },
     async getDetail () {
       const { data: { detail } } = await getProductDetail(this.$route.params.id)
+      console.log('🚀 ~ getDetail ~ detail:', detail)
       this.detail = detail
       this.images = detail.goods_images
     },
@@ -114,12 +146,67 @@ export default {
       })
       this.comment = list
       this.total = total
+    },
+    addFn () {
+      this.mode = 'cart'
+      this.show = true
+    },
+    buyFn () {
+      this.mode = 'buyNow'
+      this.show = true
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
+.product {
+  .product-title {
+    display: flex;
+    .left {
+      img {
+        width: 90px;
+        height: 90px;
+      }
+      margin: 10px;
+    }
+    .right {
+      flex: 1;
+      padding: 10px;
+      .price {
+        font-size: 14px;
+        color: #fe560a;
+        .nowprice {
+          font-size: 24px;
+          margin: 0 5px;
+        }
+      }
+    }
+  }
+
+  .num-box {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    align-items: center;
+  }
+
+  .btn, .btn-none {
+    height: 40px;
+    line-height: 40px;
+    margin: 20px;
+    border-radius: 20px;
+    text-align: center;
+    color: rgb(255, 255, 255);
+    background-color: rgb(255, 148, 2);
+  }
+  .btn.now {
+    background-color: #fe5630;
+  }
+  .btn-none {
+    background-color: #cccccc;
+  }
+}
 .proDetail {
   padding-top: 46px;
 
