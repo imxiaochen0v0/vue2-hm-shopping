@@ -104,7 +104,7 @@
       </div>
       <div class="showbtn" v-if="detail.stock_total > 0">
         <div class="btn" v-if="mode === 'cart'" @click="addCart">加入购物车</div>
-        <div class="btn now" v-else>立刻购买</div>
+        <div class="btn now" v-else @click="goBuyNow">立刻购买</div>
       </div>
       <div class="btn-none" v-else>该商品已抢完</div>
     </div>
@@ -117,10 +117,12 @@ import { getProductDetail, getProductComment } from '@/api/product'
 import { addCart, getCartTotal } from '@/api/cart'
 import defaultImg from '@/assets/default-avatar.png'
 import CountBox from '@/components/CountBox.vue'
+import loginConfirm from '@/mixins/loginConfirm'
 
 export default {
   name: 'ProDetail',
   components: { CountBox },
+  mixins: [loginConfirm],
   data () {
     return {
       addCount: 1,
@@ -140,6 +142,9 @@ export default {
     this.getDetail()
     this.getComments()
     this.getCartTotal()
+  },
+  computed: {
+
   },
   methods: {
     onChange (index) {
@@ -171,25 +176,7 @@ export default {
       this.show = true
     },
     async addCart () {
-      if (!this.$store.getters.token) {
-        this.$dialog.confirm({
-          title: '温馨提示',
-          message: '您还没有登录，是否登录？',
-          confirmButtonText: '去登录',
-          cancelButtonText: '再逛逛',
-          confirmButtonColor: 'pink'
-        }).then(() => {
-          // 如果希望跳转到登录能回跳回来，需要在跳转时携带参数(当前路径地址)
-          // this.$route.fullPath(会包含参数)
-          this.$router.replace({
-            path: '/login',
-            query: {
-              backUrl: this.$route.fullPath
-            }
-          })
-        }).catch(() => {
-
-        })
+      if (this.loginConfirm()) {
         return
       }
       const { data } = await addCart({
@@ -200,6 +187,20 @@ export default {
       this.cartTotal = data.cartTotal
       this.$toast.success('添加成功')
       this.show = false
+    },
+    goBuyNow () {
+      if (this.loginConfirm()) {
+        return
+      }
+      this.$router.push({
+        path: '/pay',
+        query: {
+          mode: 'buyNow',
+          goodsId: this.$route.params.id,
+          goodsSkuId: this.detail.skuList[0].goods_sku_id,
+          goodsNum: this.addCount
+        }
+      })
     }
   }
 }

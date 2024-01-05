@@ -50,7 +50,7 @@
           <span>合计：</span>
           <span>¥ <i class="totalPrice">{{ cartActivePrice }}</i></span>
         </div>
-        <div v-if="show" class="goPay" :class="{disabled:cartActiveTotal === 0}">结算({{ cartActiveTotal }})</div>
+        <div v-if="show" @click="goPay()" class="goPay" :class="{disabled:cartActiveTotal === 0}">结算({{ cartActiveTotal }})</div>
         <div v-else @click="handleDel" class="delete" :class="{disabled:cartActiveTotal === 0}">删除</div>
       </div>
     </div>
@@ -58,7 +58,6 @@
 </template>
 
 <script>
-// import { changeCart } from '@/api/cart'
 import CountBox from '@/components/CountBox.vue'
 import { mapState, mapGetters } from 'vuex'
 
@@ -100,6 +99,18 @@ export default {
       }
       this.$store.dispatch('cart/delCartAction')
       this.show = true
+    },
+    goPay () {
+      // 判断是否选中商品
+      if (this.cartActiveTotal > 0) {
+        this.$router.push({
+          path: '/pay',
+          query: {
+            mode: 'cart',
+            cartIds: this.cartActive.map(item => item.id).join(',')
+          }
+        })
+      }
     }
   },
   watch: {

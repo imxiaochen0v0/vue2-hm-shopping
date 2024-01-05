@@ -64,7 +64,6 @@ export default {
     },
     async delCartAction (context) {
       const cardIds = context.getters.cartActive.map(item => item.id)
-      console.log('cardIds :>> ', cardIds)
       await removeCart(cardIds)
 
       // 重新获取购物车数据
