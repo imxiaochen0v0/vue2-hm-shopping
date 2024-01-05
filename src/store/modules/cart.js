@@ -1,4 +1,4 @@
-import { getCartList } from '@/api/cart'
+import { getCartList, changeCart, removeCart } from '@/api/cart'
 export default {
   namespaced: true,
   state () {
@@ -47,12 +47,28 @@ export default {
       state.cartList.forEach(item => {
         item.isChecked = isChecked
       })
+    },
+    changeCartCount (state, { goodsNum, goodsId }) {
+      const goods = state.cartList.find(item => item.goods_id === goodsId)
+      goods.goods_num = goodsNum
     }
   },
   actions: {
     async getCartAction (context) {
       const { data } = await getCartList()
       context.commit('setCartList', data.list)
+    },
+    async changeCartAction (context, obj) {
+      context.commit('changeCartCount', obj)
+      await changeCart(obj)
+    },
+    async delCartAction (context) {
+      const cardIds = context.getters.cartActive.map(item => item.id)
+      console.log('cardIds :>> ', cardIds)
+      await removeCart(cardIds)
+
+      // 重新获取购物车数据
+      context.dispatch('getCartAction')
     }
   }
 }

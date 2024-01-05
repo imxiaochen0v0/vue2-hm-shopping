@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <!-- 导航条 -->
-    <van-nav-bar title="沃尔玛" fixed placeholder=""/>
+    <van-nav-bar title="京西" placeholder=""/>
 
     <!-- 搜索框 -->
     <van-search readonly shape="round" background="#ffffff" placeholder="请在此输入搜索关键词" @click="$router.push('/search')" />
