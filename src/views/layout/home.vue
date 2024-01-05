@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div class="home" v-if="proList && navList && bannerList">
     <!-- 导航条 -->
     <van-nav-bar title="京西" placeholder=""/>
 

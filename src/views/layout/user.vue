@@ -123,7 +123,6 @@ export default {
     async getUserInfoDetail () {
       const { data: { userInfo } } = await getUserInfoDetail()
       this.detail = userInfo
-      console.log(this.detail)
     },
     logout () {
       if (this.$store.getters.token) {
